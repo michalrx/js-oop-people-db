@@ -6,11 +6,51 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>People App</title>
+
+    <style>
+        .people > div {
+            display: inline-block;
+            width: 20%;
+        }
+        #records > div > div {display: inline-block; width: 20%}
+    </style>
 </head>
 <body>
+    <div class="container">
+        <div>
+            <input id="inputName" placeholder="Imie" />
+        </div>
+        <div>
+            <input id="inputSurname" placeholder="Nazwisko" />
+        </div>
+        <div>
+            <input id="inputAge" placeholder="Wiek" />
+        </div>
+        <div>
+            <input id="inputRole" placeholder="Funkcja" />
+        </div>
 
+        <button id="addButton">Dodaj do czarnej listy</button>
+    </div>
+    <div class="container">
+        <div class="people">
+            <div class="people__name people__name--head">
+                Imię
+            </div>
+            <div class="people__surname people__surname--head">
+                Nazwisko
+            </div>
+            <div class="people__age people__age--head">
+                Wiek
+            </div>
+            <div class="people__role people__role--head">
+                Funkcja
+            </div>
+        </div>
+        <div id="records">
 
-
-<script src="./script.js"></script>
+        </div>
+    </div>
+    <script src="./script.js"></script>
 </body>
 </html>

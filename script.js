@@ -7,6 +7,11 @@ PersonDb.prototype.addPerson = function(person) {
     this.database.push(person);
 }
 
+PersonDb.prototype.removePerson = function(removeIndex) {
+    this.database.splice(removeIndex, 1);
+    renderInstance.setHtml(dbInstance.database);
+}
+
 PersonDb.prototype.displayPeople = function() {
     console.log(this.database);
 }
@@ -20,19 +25,45 @@ function Person(attributes) {
 }
 
 //Class for render methods
-function Render(attribute) {
-    this.container = document.getElementById(attribute);
+function Render(container, button, inputName, inputSurname, inputAge, inputRole) {
+    this.container = document.getElementById(container);
+    this.button = document.getElementById(button);
+    this.inputName = document.getElementById(inputName);
+    this.inputSurname = document.getElementById(inputSurname);
+    this.inputAge = document.getElementById(inputAge);
+    this.inputRole = document.getElementById(inputRole);
 }
 
-Render.prototype.renderRow = function(name,surname,age,role) {
-    return '<div><div>' + name + '</div><div>' + surname + '</div><div>' + age + '</div><div>' + role + '</div>';
+Render.prototype.renderRow = function(name,surname,age,role,index) {
+    return '<div><div>' + name + '</div><div>' + surname + '</div><div>' + age + '</div><div>' + role + '</div><button onClick="dbInstance.removePerson('+index+')">Usuń</button></div>';
 }
 
 Render.prototype.setHtml = function(database) {
     this.container.innerHTML = '';
     var self = this;
-    dbInstance.database.map(function(person) {
-        self.container.innerHTML += this.renderRow(person.name, person.surname, person.age, person.role);
+    dbInstance.database.map(function(person, index) {
+        console.log(index);
+        self.container.innerHTML += self.renderRow(person.name, person.surname, person.age, person.role, index);
+    });
+}
+
+Render.prototype.getValuesFromInput = function() {
+    return {
+        name: this.inputName.value,
+        surname: this.inputSurname.value,
+        age: this.inputAge.value,
+        role: this.inputRole.value
+    }
+}
+
+Render.prototype.addClick = function() {
+    var self = this;
+    this.button.addEventListener('click', function() {
+        var person = self.getValuesFromInput();
+
+        dbInstance.addPerson(person);
+
+        renderInstance.setHtml(dbInstance.database);
     });
 }
 
@@ -40,37 +71,7 @@ Render.prototype.setHtml = function(database) {
 var dbInstance = new PersonDb();
 
 //Create object of Render
-var renderInstance = new Render('records');
+var renderInstance = new Render('records', 'addButton', 'inputName', 'inputSurname', 'inputAge', 'inputRole');
+renderInstance.addClick();
 
 renderInstance.setHtml(dbInstance.database);
-
-function renderRow(name,surname,age,role) {
-    return '<div><div>' + name + '</div><div>' + surname + '</div><div>' + age + '</div><div>' + role + '</div>'
-}
-
-function renderDb() {
-    var containerDb = document.getElementById('records');
-    containerDb.innerHTML = '';
-    dbInstance.database.map(function(person) {
-        containerDb.innerHTML += renderRow(person.name, person.surname, person.age, person.role);
-    });
-}
-
-var addButton = document.getElementById('addButton');
-addButton.addEventListener('click', function() {
-    var inputName = document.getElementById('inputName').value;
-    var inputSurname = document.getElementById('inputSurname').value;
-    var inputAge = document.getElementById('inputAge').value;
-    var inputRole = document.getElementById('inputRole').value;
-
-    var person1 = new Person({
-        name: inputName,
-        surname: inputSurname,
-        age: inputAge,
-        role: inputRole
-    });
-
-    dbInstance.addPerson(person1);
-
-    renderInstance.setHtml(dbInstance.database);
-});
